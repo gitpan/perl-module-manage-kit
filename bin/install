@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+use strict;
+use warnings(FATAL=>'all');
+use FindBin;
+
+chdir($FindBin::Bin);
+system('chmod 0755 install pkg_build  pkg_install pkg_uninstall pkg_list');
+
+1;
+
+
+
+

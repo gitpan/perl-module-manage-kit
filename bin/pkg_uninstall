@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+use strict;
+use warnings(FATAL=>'all');
+
+#===================================
+#===Author  : qian.yu            ===
+#===Email   : foolfish@cpan.org  ===
+#===MSN     : qian.yu@adways.net ===
+#===QQ      : 19937129           ===
+#===Homepage: www.lua.cn         ===
+#===================================
+use Config qw();
+
+my $search_dirs=[$Config::Config{installsitearch},$Config::Config{installarchlib}];
+my $lines=[@ARGV];
+
+foreach(@$lines){
+        my $module_name=$_;
+        my $ra_path=[split(/::/,$_)];
+        my $found='';
+        foreach(@$search_dirs){
+                my $file_path=$_."/auto/".join('/',@$ra_path)."/.packlist";
+                if(-e $file_path){
+			system("/bin/rm $file_path `cat $file_path`");
+                        print  "remove $module_name successfully\n";
+                        $found=1;
+                        last;
+                }
+        }
+        if(!$found){
+                print "Error !! cannot find  module  $module_name install path , so skip\n";
+        }
+
+}
+
+1;
+

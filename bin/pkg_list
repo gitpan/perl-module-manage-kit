@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+use strict;
+use warnings(FATAL=>'all');
+
+#===================================
+#===Author  : qian.yu            ===
+#===Email   : foolfish@cpan.org  ===
+#===MSN     : qian.yu@adways.net ===
+#===QQ      : 19937129           ===
+#===Homepage: www.lua.cn         ===
+#===================================
+
+use Config qw ();
+
+my $search_dirs=[$Config::Config{installsitearch},$Config::Config{installarchlib}];
+foreach(@$search_dirs){
+        chdir $_;
+        chdir 'auto';
+        my $s=`find . -name .packlist`;
+        my $lines=[split(/\s+/,$s)];
+        foreach(@$lines){
+                if(/\.\/(.*)\/\.packlist/){
+                        print join('::', split(/\//, $1)),"\n";
+                }
+        }
+}
+
+1;

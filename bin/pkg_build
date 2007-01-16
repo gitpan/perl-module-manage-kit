@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+use strict;
+use warnings(FATAL=>'all');
+
+#===================================
+#===Author  : qian.yu            ===
+#===Email   : foolfish@cpan.org  ===
+#===MSN     : qian.yu@adways.net ===
+#===QQ      : 19937129           ===
+#===Homepage: www.lua.cn         ===
+#===================================
+
+use Config qw();
+use FindBin qw();
+
+my $search_dirs=[$Config::Config{installsitearch},$Config::Config{installarchlib}];
+my $lines=[@ARGV];
+
+foreach(@$lines){
+        my $ra_path=[split(/::/,$_)];
+	my $file_name=$FindBin::Bin.'/../archive/'.join('-',@$ra_path).'.tar.gz';
+	my $found='';
+	foreach(@$search_dirs){
+		my $file_path=$_."/auto/".join('/',@$ra_path)."/.packlist";
+		if(-e $file_path){
+			system("tar zcfP \"$file_name\" $file_path `cat $file_path`");
+			print  "pack $file_name successfully\n";
+			$found=1;
+			last;
+		}
+	}
+	if(!$found){
+		print "Error !! cannot find  module  $_  install path , so skip\n";
+	}
+
+}
+
+1;
